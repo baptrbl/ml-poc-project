@@ -1,238 +1,58 @@
-# ML Project Template
+# Student Project
 
-This repository is the base template that each student will fork and adapt for the final machine learning proof-of-concept project.
+Dataset : https://archive.ics.uci.edu/dataset/320/student+performance
 
-The template already defines the project structure and the main execution workflow. Your job as a student is to plug your own dataset loading logic, trained models, evaluation metrics, and Streamlit presentation into the fixed contracts described below.
+## Préambule
 
-## Repository Structure
+Notre projet initial était d’essayer d’anticiper la probabilité qu’une personne étrangère se fasse arrêter par un agent de l’ICE selon la ville dans laquelle elle habite, dans le but qu’elle puisse éviter de se faire arrêter.
 
-- `deliverables/`: markdown files containing all assignements
-- `deliverables/assignement1.md`: first assignement due (5 in total)
-- `data/`: raw and processed data files
-- `logs/`: log files generated during execution
-- `models/`: trained machine learning models saved to disk
-- `notebooks/`: Jupyter notebooks for analysis and experimentation
-- `plots/`: generated visualizations
-- `results/`: evaluation outputs, including model comparison tables
-- `scripts/`: executable project scripts
-- `scripts/main.py`: main entry point for evaluating models and launching the app
-- `src/`: project source code
-- `src/config.py`: project paths, model registry, and Streamlit configuration
-- `src/data.py`: student-implemented dataset loading function
-- `src/metrics.py`: student-implemented metric computation function
-- `src/app.py`: fixed Streamlit entry point that students must customize
-- `tests/`: optional tests
-- `.env`: environment variables if your project needs them
+Cependant, après avoir récupéré certaines données, nous n’avions pas suffisamment de features pour réellement comprendre ce qui motive une arrestation. De plus, il nous manquait des données comparatives concernant les personnes étrangères ne se faisant pas arrêter. Le manque de précision dû à la création de données artificielles nous a donc conduits à abandonner ce projet et à le réorienter.
 
-## Expected Workflow
+## Pourquoi ce projet ?
 
-When you run:
+L’un des problèmes qui nous semble aujourd’hui les plus importants est l’inégalité des chances dans l’éducation. En effet, la méritocratie apparaît désormais comme largement illusoire. Il est donc pertinent de se demander comment comprendre ces inégalités et quels paramètres de notre quotidien influencent notre avenir.
 
-```bash
-python scripts/main.py
-```
+Cet outil est destiné à l’administration d’un lycée afin de prédire la probabilité qu’un élève souhaite poursuivre ou non des études supérieures à la fin de sa scolarité. L’objectif est d’identifier les élèves ayant le plus besoin d’accompagnement afin de pouvoir les soutenir en priorité.
 
-the template will do the following:
+## Création de nouvelles features
 
-1. read the list of trained models from `src/config.py`,
-2. call your dataset loading function from `src/data.py`,
-3. load each serialized model from `models/`,
-4. run predictions on the test split,
-5. call your metric computation function from `src/metrics.py`,
-6. save the results to `results/model_metrics.csv`,
-7. print the metrics in the terminal,
-8. launch the Streamlit app on `localhost`.
+Pour améliorer notre modèle, nous avons créé 10 nouvelles features à partir des données déjà présentes dans le dataset. L’objectif n’était pas d’inventer de nouvelles informations, mais de mieux représenter certaines situations qui peuvent influencer l’envie ou la possibilité de poursuivre des études supérieures.
 
-## What You Must Update
+Nous avons regroupé le niveau d’éducation des parents avec `parents_edu_sum`, car le contexte familial peut avoir un impact important sur l’ambition scolaire et l’accompagnement de l’élève. Nous avons aussi créé des variables liées à l’organisation de l’élève, comme `study_travel_balance` et `study_effort_index`, afin de comparer le temps consacré au travail scolaire avec le temps de trajet.
 
-### 1. Register your trained models in `src/config.py`
+Nous avons également résumé le soutien reçu par l’élève grâce à `school_support_count` et `no_support`, car un élève sans aide scolaire ou familiale peut être plus fragile. D’autres variables, comme `alcohol_total` et `risk_behavior_score`, permettent de représenter certains comportements pouvant nuire à la scolarité.
 
-Replace the example `MODELS` dictionary with your own trained models.
+Enfin, nous avons ajouté des indicateurs scolaires plus directs : `academic_avg_g1_g2`, `early_academic_risk` et `older_than_cohort`. Ces variables permettent de repérer plus facilement les élèves en difficulté dès les premières notes, ou ceux qui sont plus âgés que la majorité de leur classe.
 
-Each entry must define at least:
-
-- `name`
-- `description`
-- `path`
-
-Example:
-
-```python
-MODELS = {
-    "log_reg": {
-        "name": "Logistic Regression",
-        "description": "Baseline classifier with standardized features.",
-        "path": MODELS_DIR / "log_reg.joblib",
-    },
-    "rf": {
-        "name": "Random Forest",
-        "description": "Tree ensemble tuned on the validation split.",
-        "path": MODELS_DIR / "random_forest.pkl",
-    },
-}
-```
-
-Supported model formats are:
-
-- `.joblib`
-- `.pkl`
-- `.pickle`
-
-Each saved object must expose a `.predict(X)` method.
-
-### 2. Implement the dataset loading function in `src/data.py`
-
-The file already exists and must keep this function name and signature:
-
-```python
-def load_dataset_split() -> tuple[Any, Any, Any, Any]:
-```
-
-It must return:
-
-```python
-(X_train, X_test, y_train, y_test)
-```
-
-Constraints:
-
-- `X_train` and `X_test` must be in a format accepted by every model in `MODELS`
-- `y_train` and `y_test` must contain the matching targets
-- `X_test` and `y_test` will be used by `scripts/main.py` for evaluation
-- Typical return types are `pandas.DataFrame`, `pandas.Series`, and/or `numpy.ndarray`
-
-Minimal example:
-
-```python
-import pandas as pd
-from sklearn.model_selection import train_test_split
-
-from config import DATA_DIR
-
-
-def load_dataset_split():
-    df = pd.read_csv(DATA_DIR / "processed_dataset.csv")
-    X = df.drop(columns=["target"])
-    y = df["target"]
-    return train_test_split(X, y, test_size=0.2, random_state=42)
-```
-
-### 3. Implement the metric computation function in `src/metrics.py`
-
-The file already exists and must keep this function name and signature:
-
-```python
-def compute_metrics(y_true: Any, y_pred: Any) -> dict[str, float]:
-```
-
-It must return a dictionary mapping metric names to numeric values.
-
-Example:
-
-```python
-from sklearn.metrics import accuracy_score, f1_score
-
-
-def compute_metrics(y_true, y_pred):
-    return {
-        "accuracy": accuracy_score(y_true, y_pred),
-        "f1": f1_score(y_true, y_pred, average="weighted"),
-    }
-```
-
-Constraints:
-
-- Use the same metric names for all evaluated models
-- Every metric value must be numeric and convertible to `float`
-- The returned dictionary is written directly to `results/model_metrics.csv`
-
-### 4. Customize the Streamlit application in `src/app.py`
-
-The file `src/app.py` is the fixed Streamlit entry point used by `scripts/main.py`.
-
-Keep this function name:
-
-```python
-def build_app() -> None:
-```
-
-You should update the placeholder app to present:
-
-- the business objective,
-- the dataset and key insights,
-- your visualizations,
-- model comparison results,
-- any prediction demo or interactive workflow relevant to your project.
-
-The template app already tries to display `results/model_metrics.csv` if it exists.
-
-## Recommended Student Workflow
-
-1. Fork this repository.
-2. Create and activate your virtual environment.
-3. Install dependencies:
+## Lancer le projet
 
 ```bash
 pip install -r requirements.txt
+python3 scripts/main.py
 ```
 
-The template also reads `project-repo/.env` with `python-dotenv`. By default it contains:
+## Organisation du projet
 
 ```text
-PYTHONPATH=./src
+.
+├── data/
+│   ├── raw/                 # Données sources non modifiées
+│   └── processed/           # Données nettoyées et enrichies
+├── deliverables/            # Rendus, PDF et documents finaux
+├── models/                  # Modèles entraînés et sérialisés
+├── notebooks/               # Exploration, feature engineering, entraînement
+├── reports/
+│   └── figures/             # Graphiques exportés
+├── results/                 # Métriques et sorties d'évaluation
+├── scripts/                 # Points d'entrée exécutables
+└── src/                     # Code réutilisable du projet
 ```
 
-This is used when `scripts/main.py` launches Streamlit so modules inside `src/` resolve as top-level imports such as `from config import ...` or `from app import build_app`.
+## Fichiers importants
 
-4. Add your data files to `data/`.
-5. Train and save your models into `models/`.
-6. Update `src/config.py`.
-7. Implement `src/data.py`.
-8. Implement `src/metrics.py`.
-9. Customize `src/app.py`.
-10. Run the full project:
-
-```bash
-python scripts/main.py
-```
-
-## Output Produced by the Template
-
-After a successful run, you should have:
-
-- printed metrics in the terminal,
-- a CSV file at `results/model_metrics.csv`,
-- a Streamlit app running locally, by default at:
-
-```text
-http://localhost:8501
-```
-
-## Common Errors
-
-### `NotImplementedError` from `data`
-
-You have not implemented `load_dataset_split()` yet.
-
-### `NotImplementedError` from `metrics`
-
-You have not implemented `compute_metrics()` yet.
-
-### `FileNotFoundError` for a model path
-
-One of the model files declared in `src/config.py` does not exist in `models/`.
-
-### Model has no `predict` method
-
-The object loaded from disk is not a trained model compatible with the template evaluation flow.
-
-### Streamlit starts but shows only the placeholder page
-
-You still need to customize `src/app.py` with your project content.
-
-## Notes
-
-- Keep `scripts/main.py` as the main orchestration entry point.
-- Keep the function names and signatures in `src/data.py`, `src/metrics.py`, and `src/app.py` unchanged.
-- Save your trained models before running the template.
-- Use the same evaluation logic for all registered models so the comparison remains fair.
+- `data/raw/student-mat.csv` et `data/raw/student-por.csv` : données originales UCI.
+- `data/processed/student_data.csv` : données fusionnées.
+- `data/processed/student_data_features.csv` : données avec features créées.
+- `models/best_model.pkl` : modèle final entraîné.
+- `notebooks/code_b_annote.ipynb` : notebook d'analyse et d'entraînement.
+- `deliverables/assignment1.md`, `deliverables/read_me.pdf`, `deliverables/read_me.txt` : livrables.

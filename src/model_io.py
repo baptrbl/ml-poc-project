@@ -30,8 +30,19 @@ def load_model(model_path: Path) -> Any:
         return joblib.load(model_path)
 
     if suffix in {".pkl", ".pickle"}:
-        with model_path.open("rb") as file_handle:
-            return pickle.load(file_handle)
+        try:
+            with model_path.open("rb") as file_handle:
+                return pickle.load(file_handle)
+        except pickle.UnpicklingError:
+            try:
+                import joblib
+            except ImportError as exc:
+                raise ImportError(
+                    "This pickle file appears to require `joblib`. "
+                    "Add `joblib` to requirements.txt if needed."
+                ) from exc
+
+            return joblib.load(model_path)
 
     raise ValueError(
         f"Unsupported model format for {model_path}. Use .joblib, .pkl, or .pickle."
