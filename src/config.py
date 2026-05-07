@@ -9,7 +9,7 @@ LOGS_DIR = PROJECT_ROOT / "logs"
 MODELS_DIR = PROJECT_ROOT / "models"
 NOTEBOOKS_DIR = PROJECT_ROOT / "notebooks"
 REPORTS_DIR = PROJECT_ROOT / "reports"
-PLOTS_DIR = REPORTS_DIR / "figures"
+PLOTS_DIR = PROJECT_ROOT / "plots"
 RESULTS_DIR = PROJECT_ROOT / "results"
 SCRIPTS_DIR = PROJECT_ROOT / "scripts"
 TESTS_DIR = PROJECT_ROOT / "tests"
@@ -39,7 +39,7 @@ STREAMLIT_PORT = 8501
 
 MODELS = {
     "best_model": {
-        "name": "Best model",
+        "name": "Best student-risk model",
         "description": "Final model trained in notebooks/code_b_annote.ipynb.",
         "path": MODELS_DIR / "best_model.pkl",
     },

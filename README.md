@@ -1,37 +1,59 @@
-# Student Project
+# Student Higher Education Prediction
 
 Dataset : https://archive.ics.uci.edu/dataset/320/student+performance
 
-# Préambule
+## Project objective
 
-Mon projet initial consistait à anticiper la probabilité qu’une personne étrangère se fasse arrêter par un agent de l’ICE en fonction de la ville dans laquelle elle habite, afin de lui permettre d’éviter ce type de situation.
+This machine learning proof of concept predicts whether a student is likely to
+pursue higher education after secondary school. The project is designed as a
+decision-support tool for a school administration: students identified as at
+risk can receive additional guidance, academic support, or personalized follow-up.
 
-Cependant, après avoir collecté certaines données, je me suis rendu compte que je ne disposais pas d’assez de features pour comprendre réellement les facteurs expliquant une arrestation. De plus, il me manquait des données comparatives concernant les personnes étrangères ne se faisant pas arrêter. Le manque de précision, notamment lié à la création de données artificielles, m’a donc conduit à abandonner ce projet et à le réorienter.
+The model is not intended to replace human judgment. It is a prioritization
+signal that should be interpreted with educational context.
 
-# Pourquoi ce projet ?
+## Project background
 
-L’un des problèmes qui me semble aujourd’hui le plus important est l’inégalité des chances dans l’éducation. En effet, la méritocratie apparaît désormais comme largement illusoire. Il est donc pertinent de se demander comment comprendre ces inégalités et quels paramètres de notre quotidien influencent notre avenir.
+The initial project idea was to predict the probability that a foreign person
+could be arrested by ICE depending on the city where they live. After early data
+collection, the available variables were not sufficient to explain the event
+properly, and there was no reliable comparison group for people who were not
+arrested. Because that setup would have required artificial data and weak
+assumptions, the project was redirected toward education inequality.
 
-J’ai donc conçu cet outil à destination de l’administration d’un lycée afin de prédire la probabilité qu’un élève souhaite poursuivre ou non des études supérieures à la fin de sa scolarité. Mon objectif est d’identifier les élèves ayant le plus besoin d’accompagnement afin de pouvoir les soutenir en priorité.
+Education is a more appropriate topic for this proof of concept because the UCI
+Student Performance dataset provides structured, documented, and reproducible
+features about students, family background, support, and academic results.
 
-# Création de nouvelles features
+## Feature engineering
 
-Pour améliorer mon modèle, j’ai créé 10 nouvelles features à partir des données déjà présentes dans le dataset. Mon objectif n’était pas d’inventer de nouvelles informations, mais de mieux représenter certaines situations susceptibles d’influencer l’envie ou la possibilité de poursuivre des études supérieures.
+The processed dataset includes engineered features derived from the original UCI
+variables. These features do not invent new information; they summarize existing
+signals in a form that is easier for the model to use.
 
-J’ai regroupé le niveau d’éducation des parents avec parents_edu_sum, car le contexte familial peut avoir un impact important sur l’ambition scolaire et l’accompagnement de l’élève. J’ai aussi créé des variables liées à l’organisation de l’élève, comme study_travel_balance et study_effort_index, afin de comparer le temps consacré au travail scolaire avec le temps de trajet.
+Examples:
 
-J’ai également résumé le soutien reçu par l’élève grâce à school_support_count et no_support, car un élève sans aide scolaire ou familiale peut être plus fragile. D’autres variables, comme alcohol_total et risk_behavior_score, permettent de représenter certains comportements pouvant nuire à la scolarité.
+- `parents_edu_sum`: combined parental education level.
+- `study_travel_balance` and `study_effort_index`: relationship between study time and travel time.
+- `school_support_count` and `no_support`: level of academic or family support.
+- `alcohol_total` and `risk_behavior_score`: summarized behavioral risk signals.
+- `academic_avg_g1_g2`, `early_academic_risk`, and `older_than_cohort`: early academic indicators.
 
-Enfin, j’ai ajouté des indicateurs scolaires plus directs : academic_avg_g1_g2, early_academic_risk et older_than_cohort. Ces variables me permettent de repérer plus facilement les élèves en difficulté dès les premières notes, ou ceux qui sont plus âgés que la majorité de leur classe.
-
-## Lancer le projet
+## Run the project
 
 ```bash
+python3 -m venv .venv
+source .venv/bin/activate
 pip install -r requirements.txt
 python3 scripts/main.py
+streamlit run src/app.py
 ```
 
-## Organisation du projet
+`scripts/main.py` evaluates the registered model and writes
+`results/model_metrics.csv`. The Streamlit app presents the business objective,
+dataset, latest metrics, and an interactive prediction demo.
+
+## Repository structure
 
 ```text
 .
@@ -41,18 +63,23 @@ python3 scripts/main.py
 ├── deliverables/            # Rendus, PDF et documents finaux
 ├── models/                  # Modèles entraînés et sérialisés
 ├── notebooks/               # Exploration, feature engineering, entraînement
-├── reports/
-│   └── figures/             # Graphiques exportés
+├── plots/                   # Graphiques exportés
 ├── results/                 # Métriques et sorties d'évaluation
 ├── scripts/                 # Points d'entrée exécutables
 └── src/                     # Code réutilisable du projet
 ```
 
-## Fichiers importants
+## Important files
 
 - `data/raw/student-mat.csv` et `data/raw/student-por.csv` : données originales UCI.
 - `data/processed/student_data.csv` : données fusionnées.
 - `data/processed/student_data_features.csv` : données avec features créées.
 - `models/best_model.pkl` : modèle final entraîné.
+- `results/model_metrics.csv` : métriques générées par `python3 scripts/main.py`.
+- `src/config.py` : chemins du projet et modèle enregistré.
+- `src/data.py` : chargement du dataset et split train/test.
+- `src/metrics.py` : métriques de classification.
+- `src/app.py` : application Streamlit.
+- `scripts/main.py` : point d'entrée d'évaluation.
 - `notebooks/code_b_annote.ipynb` : notebook d'analyse et d'entraînement.
-- `deliverables/assignment1.md`, `deliverables/read_me.pdf`, `deliverables/read_me.txt` : livrables.
+- `deliverables/assignment1.md`, `deliverables/read_me.txt` : livrables.

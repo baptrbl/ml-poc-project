@@ -83,7 +83,9 @@ def build_app() -> None:
         )
 
         if not FEATURES_DATA_FILE.exists():
-            st.warning("Processed dataset not found. Run the notebook or preprocessing first.")
+            st.warning(
+                "Processed dataset not found. Run the notebook or preprocessing first."
+            )
             return
 
         df = _load_features()
@@ -95,7 +97,7 @@ def build_app() -> None:
         metric_cols[3].metric("Positive class", "no")
 
         st.subheader("Preview")
-        st.dataframe(df.head(20), use_container_width=True, hide_index=True)
+        st.dataframe(df.head(20), width="stretch", hide_index=True)
 
         if "higher" in df.columns:
             st.subheader("Target distribution")
@@ -113,18 +115,20 @@ def build_app() -> None:
                 "Average final grade depending on whether the student wants to "
                 "pursue higher education."
             )
-            st.dataframe(avg_grade, use_container_width=True, hide_index=True)
+            st.dataframe(avg_grade, width="stretch", hide_index=True)
             st.bar_chart(avg_grade.set_index("higher"))
 
     with model_tab:
         st.header("Model evaluation")
 
         if not MODEL_METRICS_FILE.exists():
-            st.info("Run `python3 scripts/main.py` to generate `results/model_metrics.csv`.")
+            st.info(
+                "Run `python3 scripts/main.py` to generate `results/model_metrics.csv`."
+            )
             return
 
         metrics_df = _load_metrics()
-        st.dataframe(metrics_df, use_container_width=True, hide_index=True)
+        st.dataframe(metrics_df, width="stretch", hide_index=True)
 
         if "f1" in metrics_df.columns:
             best_model = metrics_df.sort_values("f1", ascending=False).iloc[0]
@@ -158,7 +162,7 @@ def build_app() -> None:
             sample = X_test.iloc[[int(selected_row)]]
             prediction = int(model.predict(sample)[0])
             st.metric("Prediction", _format_risk_label(prediction))
-            st.dataframe(sample, use_container_width=True, hide_index=True)
+            st.dataframe(sample, width="stretch", hide_index=True)
         except Exception as exc:
             st.error(f"Prediction demo unavailable: {exc}")
 

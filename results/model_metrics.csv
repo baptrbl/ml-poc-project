@@ -1,2 +1,2 @@
-model_id,model_name,accuracy,precision,recall,f1
-best_model,Best model,0.9186602870813397,0.5238095238095238,0.6111111111111112,0.5641025641025641
+model_key,model_name,model_path,accuracy,precision,recall,f1
+best_model,Best student-risk model,/Users/baptistereibel/Documents/Albert_School/data2/POC/ml-poc-project/models/best_model.pkl,0.9186602870813397,0.5238095238095238,0.6111111111111112,0.5641025641025641

@@ -20,7 +20,11 @@ def load_feature_dataset() -> pd.DataFrame:
     if not FEATURES_DATA_FILE.exists():
         raise FileNotFoundError(f"Processed dataset not found: {FEATURES_DATA_FILE}")
 
-    return pd.read_csv(FEATURES_DATA_FILE)
+    df = pd.read_csv(FEATURES_DATA_FILE)
+    if TARGET_COL not in df.columns:
+        raise ValueError(f"Target column `{TARGET_COL}` is missing from the dataset.")
+
+    return df
 
 
 def safe_divide(numerator: pd.Series, denominator: pd.Series) -> np.ndarray:
@@ -91,7 +95,17 @@ def load_dataset_split() -> tuple[pd.DataFrame, pd.DataFrame, pd.Series, pd.Seri
     """Return the train/test split used in the notebook and final evaluation."""
 
     df = add_model_features(load_feature_dataset())
-    df[ENCODED_TARGET_COL] = df[TARGET_COL].map({"yes": 0, "no": 1}).astype("int64")
+    encoded_target = df[TARGET_COL].map({"yes": 0, "no": 1})
+    if encoded_target.isna().any():
+        invalid_values = sorted(
+            df.loc[encoded_target.isna(), TARGET_COL].dropna().unique()
+        )
+        raise ValueError(
+            f"Unexpected values in `{TARGET_COL}`: {invalid_values}. "
+            "Expected only 'yes' or 'no'."
+        )
+
+    df[ENCODED_TARGET_COL] = encoded_target.astype("int64")
 
     y = df[ENCODED_TARGET_COL]
     X = df.drop(columns=DROP_COLS, errors="ignore")
