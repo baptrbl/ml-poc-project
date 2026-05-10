@@ -17,6 +17,7 @@ if str(SRC_DIR) not in sys.path:
 
 from config import APP_ENTRYPOINT, MODELS, STREAMLIT_HOST, STREAMLIT_PORT
 from data import load_dataset_split
+from explainability import write_global_feature_importance
 from metrics import compute_metrics
 from model_io import load_model
 from results import write_metrics
@@ -134,6 +135,10 @@ def main(launch_app: bool = False) -> None:
     metrics_df = write_metrics(_evaluate_models(X_test, y_test))
     print("Model evaluation completed. Metrics saved to results/model_metrics.csv")
     print(metrics_df.to_string(index=False))
+
+    importance_df = write_global_feature_importance()
+    print("\nFeature importance saved to results/feature_importance.csv")
+    print(importance_df.head(10).to_string(index=False))
 
     if launch_app:
         print(f"\nLaunching Streamlit on http://{STREAMLIT_HOST}:{STREAMLIT_PORT} ...")

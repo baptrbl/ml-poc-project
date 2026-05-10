@@ -32,6 +32,7 @@ for dir in [
 ENV_FILE = PROJECT_ROOT / ".env"
 APP_ENTRYPOINT = PROJECT_ROOT / "src" / "app.py"
 MODEL_METRICS_FILE = RESULTS_DIR / "model_metrics.csv"
+FEATURE_IMPORTANCE_FILE = RESULTS_DIR / "feature_importance.csv"
 FEATURES_DATA_FILE = PROCESSED_DATA_DIR / "student_data_features.csv"
 
 STREAMLIT_HOST = "localhost"

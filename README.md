@@ -50,8 +50,39 @@ streamlit run src/app.py
 ```
 
 `scripts/main.py` evaluates the registered model and writes
-`results/model_metrics.csv`. The Streamlit app presents the business objective,
-dataset, latest metrics, and an interactive prediction demo.
+`results/model_metrics.csv` and `results/feature_importance.csv`. The Streamlit
+app presents the business objective, dataset, latest metrics, model
+explainability, and an interactive prediction demo.
+
+## Model explainability
+
+Model explainability helps understand why the model makes its predictions.
+This project includes two levels of explanation:
+
+- **Global explainability**: identifies which features matter most for the model
+  in general. For the final Random Forest model, this uses
+  `feature_importances_`, aggregated back to readable feature names.
+- **Local explainability**: explains one individual prediction. The app compares
+  the selected student with a reference student from the test set and estimates
+  which variables increase or decrease the probability of `higher = yes`.
+
+To generate the global feature importance file:
+
+```bash
+python3 scripts/main.py
+```
+
+This creates:
+
+```text
+results/feature_importance.csv
+```
+
+In the Streamlit app, open:
+
+- `Explicabilité du modèle` to see the global feature importance chart and table.
+- `Prédiction interactive` to see the probability of pursuing higher education
+  and the local factors pushing the prediction toward `yes` or `no`.
 
 ## Repository structure
 
@@ -76,8 +107,10 @@ dataset, latest metrics, and an interactive prediction demo.
 - `data/processed/student_data_features.csv` : données avec features créées.
 - `models/best_model.pkl` : modèle final entraîné.
 - `results/model_metrics.csv` : métriques générées par `python3 scripts/main.py`.
+- `results/feature_importance.csv` : importance globale des variables.
 - `src/config.py` : chemins du projet et modèle enregistré.
 - `src/data.py` : chargement du dataset et split train/test.
+- `src/explainability.py` : fonctions d'explicabilité globale et locale.
 - `src/metrics.py` : métriques de classification.
 - `src/app.py` : application Streamlit.
 - `scripts/main.py` : point d'entrée d'évaluation.
