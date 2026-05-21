@@ -121,6 +121,22 @@ def _load_test_rows() -> pd.DataFrame:
     return X_test.reset_index(drop=True)
 
 
+def _build_new_student_profile(reference_df: pd.DataFrame) -> pd.DataFrame:
+    """Create a realistic editable profile from the reference population."""
+
+    values: dict[str, object] = {}
+    for column in reference_df.columns:
+        series = reference_df[column].dropna()
+        if series.empty:
+            values[column] = 0
+        elif pd.api.types.is_numeric_dtype(series):
+            values[column] = series.median()
+        else:
+            values[column] = series.mode().iloc[0]
+
+    return pd.DataFrame([values], columns=reference_df.columns)
+
+
 def _load_best_model() -> Any:
     """Load the final model registered in config.MODELS."""
 
@@ -252,22 +268,37 @@ def _inject_css() -> None:
         h1, h2, h3 {
             font-family: var(--serif) !important;
             color: var(--ink) !important;
-            letter-spacing: -0.025em;
+            letter-spacing: 0;
+            max-width: 100%;
+            overflow-wrap: anywhere;
+            text-wrap: balance;
+            white-space: normal;
         }
         h1 {
-            font-size: 3.75rem !important;
-            line-height: 1.03 !important;
+            font-size: 2.55rem !important;
+            line-height: 1.08 !important;
             font-weight: 500 !important;
         }
         h2 {
-            font-size: 2.55rem !important;
+            font-size: 2.15rem !important;
             line-height: 1.12 !important;
             font-weight: 500 !important;
         }
         h3 {
-            font-size: 1.8rem !important;
+            font-size: 1.45rem !important;
             line-height: 1.16 !important;
             font-weight: 600 !important;
+        }
+        div[data-testid="column"],
+        div[data-testid="column"] > div,
+        [data-testid="stMarkdownContainer"] {
+            min-width: 0;
+        }
+        [data-testid="stSidebar"] h1 {
+            font-size: 2.05rem !important;
+            line-height: 1.05 !important;
+            white-space: normal;
+            overflow-wrap: normal;
         }
         p, li, div, span {
             font-family: var(--sans);
@@ -278,10 +309,12 @@ def _inject_css() -> None:
         .metric-card {
             border: 1px solid var(--rule-hair);
             border-radius: 8px;
-            padding: 1.05rem 1.15rem;
+            padding: 0.95rem 0.85rem;
             background: var(--surface);
             box-shadow: 0 2px 8px rgba(0, 0, 145, 0.05);
             min-height: 112px;
+            min-width: 0;
+            overflow: hidden;
         }
         .metric-card,
         .metric-card * {
@@ -289,18 +322,30 @@ def _inject_css() -> None:
         }
         .metric-label {
             color: var(--ink-3);
-            font-size: 0.68rem;
+            font-size: 0.58rem;
             font-weight: 500;
-            letter-spacing: 0.14em;
+            letter-spacing: 0.04em;
             text-transform: uppercase;
             margin-bottom: 0.75rem;
+            max-width: 100%;
+            line-height: 1.25;
+            overflow-wrap: normal;
+            white-space: normal;
         }
         .metric-value {
             color: var(--ink);
-            font-size: 1.75rem;
+            font-size: 1.25rem;
             font-weight: 500;
-            line-height: 1.05;
+            line-height: 1.1;
             font-variant-numeric: tabular-nums;
+            max-width: 100%;
+            overflow-wrap: anywhere;
+            white-space: normal;
+        }
+        .metric-value-long {
+            font-size: 0.92rem;
+            line-height: 1.18;
+            overflow-wrap: normal;
         }
         .probability-card {
             border: 1px solid rgba(0, 0, 145, 0.22);
@@ -350,6 +395,56 @@ def _inject_css() -> None:
         .section-card b {
             color: var(--ink);
         }
+        .value-card {
+            min-height: 176px;
+            height: 100%;
+            border-radius: 8px;
+            padding: 1.35rem 1.45rem;
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-start;
+            gap: 0.8rem;
+            border: 1px solid rgba(0, 0, 145, 0.16);
+            box-shadow: 0 2px 10px rgba(0, 0, 145, 0.05);
+        }
+        .value-card h3 {
+            font-family: var(--sans) !important;
+            font-size: 1.05rem !important;
+            line-height: 1.22 !important;
+            font-weight: 800 !important;
+            margin: 0;
+            color: inherit !important;
+            white-space: normal;
+            overflow-wrap: normal;
+        }
+        .value-card p {
+            margin: 0;
+            font-size: 0.98rem;
+            line-height: 1.48;
+            color: inherit;
+        }
+        .value-card-blue {
+            background: var(--republic-blue);
+            color: #FFFFFF;
+            border-color: var(--republic-blue);
+        }
+        .value-card-white {
+            background: #FFFFFF;
+            color: var(--ink);
+            border-top: 5px solid var(--republic-blue);
+            border-bottom: 5px solid var(--republic-red);
+            padding-top: calc(1.35rem - 4px);
+            padding-bottom: calc(1.35rem - 4px);
+        }
+        .value-card-red {
+            background: var(--republic-red);
+            color: #FFFFFF;
+            border-color: var(--republic-red);
+        }
+        .value-card-blue *,
+        .value-card-red * {
+            color: #FFFFFF !important;
+        }
         .hero-card {
             border: 1px solid rgba(0, 0, 145, 0.20);
             border-radius: 12px;
@@ -364,11 +459,15 @@ def _inject_css() -> None:
         .hero-card h1 {
             color: var(--ink);
             font-family: var(--serif);
-            font-size: clamp(2.8rem, 6vw, 5.5rem);
-            line-height: 0.98;
+            font-size: 2.9rem;
+            line-height: 1.08;
             font-weight: 500;
-            letter-spacing: -0.04em;
+            letter-spacing: 0;
             margin-bottom: 1rem;
+            max-width: 100%;
+            overflow-wrap: normal;
+            text-wrap: balance;
+            white-space: normal;
         }
         .hero-card p {
             color: var(--ink-2);
@@ -489,9 +588,25 @@ def _inject_css() -> None:
         input,
         textarea,
         select,
-        [data-baseweb="select"] *,
         [data-baseweb="input"] * {
             color: var(--ink) !important;
+        }
+        [data-baseweb="select"] > div {
+            background: #272832 !important;
+            border-color: #272832 !important;
+            color: #FFFFFF !important;
+        }
+        [data-baseweb="select"] *,
+        [data-baseweb="popover"] [role="listbox"] *,
+        [data-baseweb="popover"] [role="option"] * {
+            color: #FFFFFF !important;
+        }
+        [data-baseweb="popover"] [role="listbox"],
+        [data-baseweb="popover"] [role="option"] {
+            background: #272832 !important;
+        }
+        [data-baseweb="popover"] [role="option"]:hover {
+            background: var(--signal) !important;
         }
         input,
         textarea {
@@ -510,11 +625,12 @@ def _metric_card(label: str, value: str, help_text: str | None = None) -> None:
     """Render a compact KPI card."""
 
     help_markup = f'<div class="muted">{help_text}</div>' if help_text else ""
+    value_class = "metric-value metric-value-long" if len(value) > 16 else "metric-value"
     st.markdown(
         f"""
         <div class="metric-card">
             <div class="metric-label">{label}</div>
-            <div class="metric-value">{value}</div>
+            <div class="{value_class}">{value}</div>
             {help_markup}
         </div>
         """,
@@ -953,29 +1069,44 @@ def _render_home(df: pd.DataFrame | None, metrics_df: pd.DataFrame | None) -> No
     st.subheader("Pourquoi ce projet est utile")
     cols = st.columns(3)
     with cols[0]:
-        st.markdown('<div class="section-card">', unsafe_allow_html=True)
-        st.markdown("**Repérer plus tôt**")
-        st.write(
-            "Mettre en évidence des signaux scolaires ou sociaux pouvant justifier "
-            "un accompagnement."
+        st.markdown(
+            """
+            <article class="value-card value-card-blue">
+                <h3>Repérer plus tôt</h3>
+                <p>
+                    Mettre en évidence des signaux scolaires ou sociaux pouvant
+                    justifier un accompagnement.
+                </p>
+            </article>
+            """,
+            unsafe_allow_html=True,
         )
-        st.markdown("</div>", unsafe_allow_html=True)
     with cols[1]:
-        st.markdown('<div class="section-card">', unsafe_allow_html=True)
-        st.markdown("**Prioriser l'action**")
-        st.write(
-            "Aider les équipes à concentrer leur suivi sur les profils les plus "
-            "fragiles."
+        st.markdown(
+            """
+            <article class="value-card value-card-white">
+                <h3>Prioriser l'action</h3>
+                <p>
+                    Aider les équipes à concentrer leur suivi sur les profils
+                    les plus fragiles.
+                </p>
+            </article>
+            """,
+            unsafe_allow_html=True,
         )
-        st.markdown("</div>", unsafe_allow_html=True)
     with cols[2]:
-        st.markdown('<div class="section-card">', unsafe_allow_html=True)
-        st.markdown("**Garder l'humain au centre**")
-        st.write(
-            "Le modèle propose un signal, mais la décision reste pédagogique et "
-            "contextuelle."
+        st.markdown(
+            """
+            <article class="value-card value-card-red">
+                <h3>Garder l'humain au centre</h3>
+                <p>
+                    Le modèle propose un signal, mais la décision reste
+                    pédagogique et contextuelle.
+                </p>
+            </article>
+            """,
+            unsafe_allow_html=True,
         )
-        st.markdown("</div>", unsafe_allow_html=True)
 
 
 def _render_overview(df: pd.DataFrame | None, metrics_df: pd.DataFrame | None) -> None:
@@ -1234,8 +1365,9 @@ def _render_interactive_prediction() -> None:
 
     st.title("Prédiction interactive")
     st.write(
-        "Cette démo part d'un élève réel du jeu d'évaluation. Les champs ci-dessous "
-        "permettent de modifier quelques signaux clés sans reconstruire tout le dataset."
+        "Cette démo permet de partir d'un élève réel du jeu d'évaluation ou "
+        "d'ajouter un nouveau profil. Les champs ci-dessous modifient quelques "
+        "signaux clés sans reconstruire tout le dataset."
     )
 
     try:
@@ -1245,12 +1377,21 @@ def _render_interactive_prediction() -> None:
         st.warning(f"Démo de prédiction indisponible : {exc}")
         return
 
-    base_index = st.selectbox(
+    add_student_option = "Ajouter un élève"
+    profile_options: list[int | str] = [add_student_option, *list(range(len(X_test)))]
+    selected_profile = st.selectbox(
         "Profil de départ",
-        options=list(range(len(X_test))),
-        format_func=lambda value: f"Élève #{value}",
+        options=profile_options,
+        format_func=lambda value: value if isinstance(value, str) else f"Élève #{value}",
     )
-    sample = X_test.iloc[[int(base_index)]].copy()
+    if selected_profile == add_student_option:
+        sample = _build_new_student_profile(X_test)
+        st.caption(
+            "Nouveau profil initialisé avec des valeurs représentatives du dataset. "
+            "Ajuste les paramètres ci-dessous pour créer ton élève."
+        )
+    else:
+        sample = X_test.iloc[[int(selected_profile)]].copy()
 
     form_col, result_col = st.columns([1.2, 0.8])
     with form_col:
