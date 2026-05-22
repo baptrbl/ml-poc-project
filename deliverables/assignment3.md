@@ -47,7 +47,7 @@ Les scores ci-dessous proviennent du benchmark du notebook, sauvegarde dans `del
 | Logistic Regression | 0.817 | 0.277 | 0.691 | 0.393 | 0.833 | -43.8 |
 | SVM | 0.889 | 0.362 | 0.410 | 0.376 | 0.857 | -43.8 |
 | Gradient Boosting | 0.922 | 0.593 | 0.255 | 0.342 | 0.863 | -44.8 |
-| Random Forest | 0.921 | 0.800 | 0.070 | 0.128 | 0.882 | -52.8 |
+| Random Forest | 0.921 | 0.800 | 0.778 | 0.128 | 0.882 | -52.8 |
 | Decision Tree | 0.871 | 0.218 | 0.228 | 0.219 | 0.579 | -54.6 |
 
 ## Résultat du modèle final
