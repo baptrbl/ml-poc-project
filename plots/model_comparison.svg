@@ -1,0 +1,38 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="980" height="620" viewBox="0 0 980 620" role="img" aria-labelledby="title desc">
+  <title id="title">Comparaison des modeles testes</title>
+  <desc id="desc">Comparaison des scores F1 et ROC AUC pour six modeles.</desc>
+  <rect width="980" height="620" fill="#ffffff"/>
+  <text x="60" y="55" font-family="Arial, sans-serif" font-size="26" font-weight="700" fill="#1E1E1E">Comparaison des modèles testés</text>
+  <text x="60" y="86" font-family="Arial, sans-serif" font-size="15" fill="#666666">Scores moyens en validation croisée issus du benchmark notebook</text>
+  <line x1="95" y1="460" x2="900" y2="460" stroke="#D6D6E7" stroke-width="2"/>
+  <line x1="95" y1="140" x2="95" y2="460" stroke="#D6D6E7" stroke-width="2"/>
+  <g font-family="Arial, sans-serif" font-size="13" fill="#666666">
+    <text x="76" y="464" text-anchor="end">0.0</text>
+    <text x="76" y="304" text-anchor="end">0.5</text>
+    <text x="76" y="144" text-anchor="end">1.0</text>
+  </g>
+  <g stroke="#EEF0FA" stroke-width="1">
+    <line x1="95" y1="300" x2="900" y2="300"/>
+    <line x1="95" y1="140" x2="900" y2="140"/>
+  </g>
+  <g>
+    <rect x="130" y="333" width="32" height="127" fill="#E1000F"/><rect x="166" y="186" width="32" height="274" fill="#000091"/>
+    <rect x="250" y="334" width="32" height="126" fill="#E1000F"/><rect x="286" y="194" width="32" height="266" fill="#000091"/>
+    <rect x="370" y="340" width="32" height="120" fill="#E1000F"/><rect x="406" y="186" width="32" height="274" fill="#000091"/>
+    <rect x="490" y="351" width="32" height="109" fill="#E1000F"/><rect x="526" y="184" width="32" height="276" fill="#000091"/>
+    <rect x="610" y="419" width="32" height="41" fill="#E1000F"/><rect x="646" y="178" width="32" height="282" fill="#000091"/>
+    <rect x="730" y="390" width="32" height="70" fill="#E1000F"/><rect x="766" y="275" width="32" height="185" fill="#000091"/>
+  </g>
+  <g font-family="Arial, sans-serif" font-size="13" fill="#1E1E1E" text-anchor="middle">
+    <text x="164" y="500">AdaBoost</text>
+    <text x="284" y="500">LogReg</text>
+    <text x="404" y="500">SVM</text>
+    <text x="524" y="500">Gradient</text>
+    <text x="644" y="500">Random</text>
+    <text x="764" y="500">Decision</text>
+  </g>
+  <rect x="620" y="76" width="18" height="18" fill="#E1000F"/>
+  <text x="646" y="91" font-family="Arial, sans-serif" font-size="14" fill="#1E1E1E">F1-score</text>
+  <rect x="730" y="76" width="18" height="18" fill="#000091"/>
+  <text x="756" y="91" font-family="Arial, sans-serif" font-size="14" fill="#1E1E1E">ROC AUC</text>
+</svg>

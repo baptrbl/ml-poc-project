@@ -2,6 +2,41 @@
 
 Dataset : https://archive.ics.uci.edu/dataset/320/student+performance
 
+## Description rapide du projet
+
+Ce projet est un proof of concept de machine learning qui prédit si un élève est
+à risque de ne pas poursuivre vers les études supérieures. L'objectif métier est
+d'aider une équipe pédagogique à prioriser les élèves qui pourraient bénéficier
+d'un accompagnement d'orientation ou d'un suivi renforcé.
+
+Le modèle final est intégré dans une application Streamlit disponible dans
+`src/app.py`. Les livrables demandés sont disponibles directement à la racine du
+repo :
+
+- `assignment1.md` : explication rapide du projet et des données.
+- `assignment2.md` : feature engineering et dataset préprocessé.
+- `assignment3.md` : description et comparaison des modèles.
+- `plots/` : minimum 3 graphiques exportés et versionnés.
+- `models/best_model.pkl` : modèle final sérialisé.
+
+## Guide pour récupérer les données
+
+Les données nécessaires sont déjà versionnées dans le repository :
+
+- `data/raw/student-mat.csv`
+- `data/raw/student-por.csv`
+- `data/processed/student_data.csv`
+- `data/processed/student_data_features.csv`
+
+Pour repartir de zéro, la source officielle est le UCI Student Performance
+Dataset :
+
+https://archive.ics.uci.edu/dataset/320/student+performance
+
+Télécharger les fichiers `student-mat.csv` et `student-por.csv`, puis les placer
+dans `data/raw/`. Le dataset enrichi utilisé par le modèle est disponible dans
+`data/processed/student_data_features.csv`.
+
 ## Project objective
 
 This machine learning proof of concept predicts whether a student is likely to
@@ -107,7 +142,11 @@ In the Streamlit app, open:
 - `data/processed/student_data_features.csv` : données avec features créées.
 - `models/best_model.pkl` : modèle final entraîné.
 - `results/model_metrics.csv` : métriques générées par `python3 scripts/main.py`.
+- `results/model_benchmark.csv` : comparaison des modèles testés dans le notebook.
 - `results/feature_importance.csv` : importance globale des variables.
+- `plots/target_distribution.svg` : distribution de la cible.
+- `plots/model_comparison.svg` : comparaison visuelle des modèles.
+- `plots/feature_importance.svg` : importance globale des variables.
 - `src/config.py` : chemins du projet et modèle enregistré.
 - `src/data.py` : chargement du dataset et split train/test.
 - `src/explainability.py` : fonctions d'explicabilité globale et locale.
@@ -115,4 +154,4 @@ In the Streamlit app, open:
 - `src/app.py` : application Streamlit.
 - `scripts/main.py` : point d'entrée d'évaluation.
 - `notebooks/code_b_annote.ipynb` : notebook d'analyse et d'entraînement.
-- `deliverables/assignment1.md`, `deliverables/read_me.txt` : livrables.
+- `assignment1.md`, `assignment2.md`, `assignment3.md` : livrables demandés.

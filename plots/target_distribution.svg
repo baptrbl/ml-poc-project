@@ -1,0 +1,18 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="820" height="520" viewBox="0 0 820 520" role="img" aria-labelledby="title desc">
+  <title id="title">Distribution de la cible higher</title>
+  <desc id="desc">Graphique montrant 955 eleves higher yes et 89 eleves higher no.</desc>
+  <rect width="820" height="520" fill="#ffffff"/>
+  <text x="60" y="55" font-family="Arial, sans-serif" font-size="26" font-weight="700" fill="#1E1E1E">Distribution de la cible higher</text>
+  <text x="60" y="86" font-family="Arial, sans-serif" font-size="15" fill="#666666">Nombre d'eleves par intention de poursuite d'etudes superieures</text>
+  <line x1="210" y1="390" x2="760" y2="390" stroke="#D6D6E7" stroke-width="2"/>
+  <line x1="210" y1="110" x2="210" y2="390" stroke="#D6D6E7" stroke-width="2"/>
+  <rect x="230" y="130" width="500" height="80" rx="4" fill="#000091"/>
+  <rect x="230" y="270" width="47" height="80" rx="4" fill="#E1000F"/>
+  <text x="165" y="180" font-family="Arial, sans-serif" font-size="20" font-weight="700" text-anchor="end" fill="#1E1E1E">yes</text>
+  <text x="165" y="320" font-family="Arial, sans-serif" font-size="20" font-weight="700" text-anchor="end" fill="#1E1E1E">no</text>
+  <text x="745" y="180" font-family="Arial, sans-serif" font-size="21" font-weight="700" fill="#000091">955</text>
+  <text x="292" y="320" font-family="Arial, sans-serif" font-size="21" font-weight="700" fill="#E1000F">89</text>
+  <text x="210" y="430" font-family="Arial, sans-serif" font-size="14" fill="#666666">0</text>
+  <text x="466" y="430" font-family="Arial, sans-serif" font-size="14" fill="#666666">500</text>
+  <text x="715" y="430" font-family="Arial, sans-serif" font-size="14" fill="#666666">1 000</text>
+</svg>
