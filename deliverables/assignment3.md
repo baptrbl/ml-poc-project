@@ -39,7 +39,7 @@ Le modele final est optimise avec une validation croisee sensible au cout metier
 
 ## Comparaison des modèles
 
-Les scores ci-dessous proviennent du benchmark du notebook, sauvegarde dans `results/model_benchmark.csv`.
+Les scores ci-dessous proviennent du benchmark du notebook, sauvegarde dans `deliverables/model_benchmark.csv`.
 
 | Modele | Accuracy | Precision | Recall | F1 | ROC AUC | Business cost score |
 | --- | ---: | ---: | ---: | ---: | ---: | ---: |

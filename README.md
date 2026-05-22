@@ -10,13 +10,13 @@ d'aider une équipe pédagogique à prioriser les élèves qui pourraient béné
 d'un accompagnement d'orientation ou d'un suivi renforcé.
 
 Le modèle final est intégré dans une application Streamlit disponible dans
-`src/app.py`. Les livrables demandés sont disponibles directement à la racine du
-repo :
+`src/app.py`. Les livrables demandés sont regroupés dans le dossier
+`deliverables/` :
 
-- `assignment1.md` : explication rapide du projet et des données.
-- `assignment2.md` : feature engineering et dataset préprocessé.
-- `assignment3.md` : description et comparaison des modèles.
-- `plots/` : minimum 3 graphiques exportés et versionnés.
+- `deliverables/assignment1.md` : explication rapide du projet et des données.
+- `deliverables/assignment2.md` : feature engineering et dataset préprocessé.
+- `deliverables/assignment3.md` : description et comparaison des modèles.
+- `deliverables/plots/` : minimum 3 graphiques exportés et versionnés.
 - `models/best_model.pkl` : modèle final sérialisé.
 
 ## Guide pour récupérer les données
@@ -126,10 +126,10 @@ In the Streamlit app, open:
 ├── data/
 │   ├── raw/                 # Données sources non modifiées
 │   └── processed/           # Données nettoyées et enrichies
-├── deliverables/            # Rendus, PDF et documents finaux
+├── deliverables/            # Rendus finaux : assignments, plots et benchmark
 ├── models/                  # Modèles entraînés et sérialisés
 ├── notebooks/               # Exploration, feature engineering, entraînement
-├── plots/                   # Graphiques exportés
+├── plots/                   # Dossier historique conservé vide avec .gitkeep
 ├── results/                 # Métriques et sorties d'évaluation
 ├── scripts/                 # Points d'entrée exécutables
 └── src/                     # Code réutilisable du projet
@@ -142,11 +142,11 @@ In the Streamlit app, open:
 - `data/processed/student_data_features.csv` : données avec features créées.
 - `models/best_model.pkl` : modèle final entraîné.
 - `results/model_metrics.csv` : métriques générées par `python3 scripts/main.py`.
-- `results/model_benchmark.csv` : comparaison des modèles testés dans le notebook.
 - `results/feature_importance.csv` : importance globale des variables.
-- `plots/target_distribution.svg` : distribution de la cible.
-- `plots/model_comparison.svg` : comparaison visuelle des modèles.
-- `plots/feature_importance.svg` : importance globale des variables.
+- `deliverables/model_benchmark.csv` : comparaison des modèles testés dans le notebook.
+- `deliverables/plots/target_distribution.svg` : distribution de la cible.
+- `deliverables/plots/model_comparison.svg` : comparaison visuelle des modèles.
+- `deliverables/plots/feature_importance.svg` : importance globale des variables.
 - `src/config.py` : chemins du projet et modèle enregistré.
 - `src/data.py` : chargement du dataset et split train/test.
 - `src/explainability.py` : fonctions d'explicabilité globale et locale.
@@ -154,4 +154,4 @@ In the Streamlit app, open:
 - `src/app.py` : application Streamlit.
 - `scripts/main.py` : point d'entrée d'évaluation.
 - `notebooks/code_b_annote.ipynb` : notebook d'analyse et d'entraînement.
-- `assignment1.md`, `assignment2.md`, `assignment3.md` : livrables demandés.
+- `deliverables/assignment1.md`, `deliverables/assignment2.md`, `deliverables/assignment3.md` : livrables demandés.
