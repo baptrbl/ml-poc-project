@@ -10,7 +10,7 @@ Le modele ne remplace pas une decision humaine. Il sert uniquement de signal d'a
 
 Le cas d'usage vise a reduire les inegalites d'opportunite dans l'orientation. Un etablissement peut utiliser ce type d'outil pour reperer plus tot des eleves fragiles, puis declencher un echange humain avec eux, et mettre en place des accompagnements, et solution pour remédier à cela.
 
-Dans ce projet, la classe suivie est l'absence de poursuite vers les etudes superieures. Elle est minoritaire dans le dataset, ce qui rend les metriques comme le recall et le F1-score importantes en plus de l'accuracy.
+Dans ce projet, la classe suivie est l'absence de poursuite vers les etudes superieures. Elle est minoritaire dans le dataset, ce qui rend les metriques comme le recall importantes en plus de l'accuracy. On cherche également à regarder le meilleur recall, car on préfère privilègier peu de FN au détriment des FP (il vaut mieux plus de soutient pour les élèves qui n'en n'ont pas besoins qu'inversement).
 
 ## Donnees utilisees
 
